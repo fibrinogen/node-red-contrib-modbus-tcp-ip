@@ -15,8 +15,8 @@ npm install this module and you can find the block. Example node-red code can be
 ### Injecting Payload
 ![Input Payload](https://github.com/balaji8385/node-red-contrib-modbus-tcp-ip/raw/master/sample/images/payload.png)
 
-## Additial Payload Options
-Also you can send the modbus ip and port along with payload instead of giving it at the input of node
+## Additioal Payload Options
+Also you can send the modbus ip and port along with payload instead of giving it at the input of node. You need to empty the values for ip and port inside the node.
 Eg:
 {   "unitid":5,  "functioncode":3,   "address":3000,   "quantity":100,   "modbus_ip":"192.168.10.31", "modbus_port": 3666  }
 
