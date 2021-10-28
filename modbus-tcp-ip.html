@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('modbus-read',{
+    RED.nodes.registerType('modbus-get',{
         category: 'function',
         color: '#D8BFD8',
         defaults: {
@@ -15,12 +15,12 @@
         outputs:1,
         icon: "bridge.png",
         label: function() {
-            return this.name||"modbus read";
+            return this.name||"modbus get";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="modbus-read">
+<script type="text/x-red" data-template-name="modbus-get">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i>name</label>
         <input type="text" id="node-input-name" placeholder="name">
@@ -51,7 +51,7 @@
     </div>
 </script>
 
-<script type="text/html" data-help-name="modbus-read">
+<script type="text/html" data-help-name="modbus-get">
     <p>Connects to a modbus slave and performs modbus read operations via TCP/IP.</p>
     
     <h3>Inputs</h3>

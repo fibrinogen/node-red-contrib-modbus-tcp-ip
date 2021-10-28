@@ -177,5 +177,5 @@ module.exports = function (RED) {
             );
         });
     }
-    RED.nodes.registerType("modbus-read", ModbusTcpIpNode);
+    RED.nodes.registerType("modbus-get", ModbusTcpIpNode);
 }
