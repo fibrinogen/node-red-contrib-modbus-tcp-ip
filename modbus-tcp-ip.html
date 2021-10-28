@@ -3,7 +3,7 @@
         category: 'function',
         color: '#D8BFD8',
         defaults: {
-            name: {value:"modbus read"},
+            name: {value:"modbus get"},
             ip: {value:"192.168.0.100", type:"string"},
             port: {value:502, type:"number"},
             timeout: {value:100, type:"number"},
@@ -16,7 +16,8 @@
         icon: "bridge.png",
         label: function() {
             return this.name||"modbus get";
-        }
+        },
+        paletteLabel: "modbus get"
     });
 </script>
 
