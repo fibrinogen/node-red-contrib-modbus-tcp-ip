@@ -1,4 +1,7 @@
-# Forked from https://github.com/balaji8385/node-red-contrib-modbus-tcp-ip
+# node-red-contrib-re-modbus-tcp-ip
+
+Forked from https://github.com/balaji8385/node-red-contrib-modbus-tcp-ip
+
 Version 1.2.0
 * Modified error log handling
 * Empty port can be saved without error
@@ -19,13 +22,13 @@ Install the module via npm or directly via node-red. The module will be located 
 See help for an example.
 
 ### Flow
-![Flow](https://github.com/balaji8385/node-red-contrib-modbus-tcp-ip/raw/master/sample/images/flow.png)
+![Flow](https://github.com/fibrinogen/node-red-contrib-modbus-tcp-ip/raw/master/sample/images/flow.png)
 
 ### Editing Connection
-![Edit Connection](https://github.com/balaji8385/node-red-contrib-modbus-tcp-ip/raw/master/sample/images/edit.png)
+![Edit Connection](https://github.com/fibrinogen/node-red-contrib-modbus-tcp-ip/raw/master/sample/images/edit.png)
 
 ### Injecting Payload
-![Input Payload](https://github.com/balaji8385/node-red-contrib-modbus-tcp-ip/raw/master/sample/images/payload.png)
+![Input Payload](https://github.com/fibrinogen/node-red-contrib-modbus-tcp-ip/raw/master/sample/images/payload.png)
 
 ## Additional Payload Options
 You can also send the modbus ip and port along with payload instead of giving it at the input of node. 
@@ -47,7 +50,7 @@ Eg:
 ## Authors
 
 * **Balaji L Narayanan** - *Initial work* - [balaji8385](https://github.com/balaji8385)
-* **Stefan Bremer [fibrinogen](https://github.com/fibrinogen)
+* **Stefan Bremer** [fibrinogen](https://github.com/fibrinogen)
 
 Makes use of:
 * modbus-stream (is included directly to avoid build problems with serial drivers)
