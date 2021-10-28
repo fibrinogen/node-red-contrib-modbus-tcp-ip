@@ -13,7 +13,6 @@ let getModbusConnection = (ip, port) => {
     })
 }
 
-
 let startTime, endTime;
 
 function start() {
@@ -41,115 +40,111 @@ module.exports = function (RED) {
             msg.ip = node.ip ? node.ip : msg.payload.modbus_ip;
             msg.port = node.port ? parseInt(node.port) : parseInt(msg.payload.modbus_port);
 
-            if(!msg.ip || !msg.port) done("Invaid Modbus IP or PORT");
-            else{
-                if (!msg.payload.address && msg.payload.address !== 0) {
-                    done("Invaid Modbus Address");
-                } else if (!msg.payload.quantity) {
-                    done("Invaid Modbus Quantity");
-                } else if (!msg.payload.unitid) {
-                    done("Invaid Modbus Unit ID");
-                } else {
-                    // if (!connection) {
-                    try {
-                        node.status({
-                            fill: "yellow",
-                            shape: "dot",
-                            text: "Connecting to MODBUS TCP/IP"
-                        });
-                        connection = await getModbusConnection(msg.ip , msg.port);
-                        // node.log("Connection Established");
-                        connection.on('error', (err) => {
-                            node.log(`Re-Connecting to ${node.ip}:${node.port}`);
-                        });
+            if(!msg.ip || !msg.port) 
+                done("Invaid Modbus IP or PORT");
+            if (!msg.payload.address && msg.payload.address !== 0) 
+                done("Invaid Modbus Address");
+            if (!msg.payload.quantity)
+                done("Invaid Modbus Quantity");
+            if (!msg.payload.unitid)
+                done("Invaid Modbus Unit ID");
+            
+            try {
+                node.status({
+                    fill: "yellow",
+                    shape: "dot",
+                    text: "Connecting to MODBUS TCP/IP"
+                });
+                connection = await getModbusConnection(msg.ip , msg.port);
+                // node.log("Connection Established");
+                connection.on('error', (err) => {
+                    node.log(`Re-Connecting to ${node.ip}:${node.port}`);
+                });
+                node.status({
+                    fill: "green",
+                    shape: "dot",
+                    text: "Connection Established"
+                });
+            } catch (err) {
+                if(node.logerror) node.error(err, err.message);
+                node.status({
+                    fill: "red",
+                    shape: "dot",
+                    text: "Connection Error"
+                })
+                done();
+            }
+
+            if (connection) {
+                start();
+                node.status({
+                    fill: "yellow",
+                    shape: "dot",
+                    text: "Sending Request"
+                })
+
+                let responseCallBack = (err, res) => {
+                    if (!err) {
                         node.status({
                             fill: "green",
                             shape: "dot",
-                            text: "Connection Established"
+                            text: "Response Received " + end() + " ms"
+                        })
+                        msg.responseBuffer = {};
+                        msg.responseBuffer.buffer = Buffer.concat(res.response.data);
+                        connection.close(() => {
+                            node.log("Connection closed");
                         });
-                    } catch (err) {
-                        if(node.logerror) node.error(err, err.message);
+                        send(msg);
+                        done();
+                    } else {
                         node.status({
                             fill: "red",
                             shape: "dot",
-                            text: "Connection Error"
+                            text: "Error Getting Response"
                         })
+                        if(node.logerror) node.error(err, err.message)
+                        connection.close(() => {
+                            node.log("Connection closed");
+                        });
                         done();
                     }
-                    // }
-    
-                    if (connection) {
-                        start();
-                        node.status({
-                            fill: "yellow",
-                            shape: "dot",
-                            text: "Sending Request"
-                        })
-    
-                        let responseCallBack = (err, res) => {
-                            if (!err) {
-                                node.status({
-                                    fill: "green",
-                                    shape: "dot",
-                                    text: "Response Received " + end() + " ms"
-                                })
-                                msg.responseBuffer = {};
-                                msg.responseBuffer.buffer = Buffer.concat(res.response.data);
-                                connection.close(() => {
-                                    node.log("Connection closed");
-                                });
-                                send(msg);
-                                done();
-                            } else {
-                                node.status({
-                                    fill: "red",
-                                    shape: "dot",
-                                    text: "Error Getting Response"
-                                })
-                                if(node.logerror) node.error(err, err.message)
-                                connection.close(() => {
-                                    node.log("Connection closed");
-                                });
-                                done();
-                            }
-                        }
-    
-                        if (msg.payload.functioncode == 1) {
-                            connection.readCoils({
-                                address: msg.payload.address,
-                                quantity: msg.payload.quantity,
-                                extra: {
-                                    unitId: msg.payload.unitid
-                                }
-                            }, responseCallBack)
-                        } else if (msg.payload.functioncode == 2) {
-                            connection.readDiscreteInputs({
-                                address: msg.payload.address,
-                                quantity: msg.payload.quantity,
-                                extra: {
-                                    unitId: msg.payload.unitid
-                                }
-                            }, responseCallBack)
-                        } else if (msg.payload.functioncode == 3) {
-                            connection.readHoldingRegisters({
-                                address: msg.payload.address,
-                                quantity: msg.payload.quantity,
-                                extra: {
-                                    unitId: msg.payload.unitid
-                                }
-                            }, responseCallBack)
-                        } else if (msg.payload.functioncode == 4) {
-                            connection.readInputRegisters({
-                                address: msg.payload.address,
-                                quantity: msg.payload.quantity,
-                                extra: {
-                                    unitId: msg.payload.unitid
-                                }
-                            }, responseCallBack)
-                        }
-                    }
                 }
-            }
+
+                if (msg.payload.functioncode == 1) {
+                    connection.readCoils({
+                        address: msg.payload.address,
+                        quantity: msg.payload.quantity,
+                        extra: {
+                            unitId: msg.payload.unitid
+                        }
+                    }, responseCallBack)
+                } else if (msg.payload.functioncode == 2) {
+                    connection.readDiscreteInputs({
+                        address: msg.payload.address,
+                        quantity: msg.payload.quantity,
+                        extra: {
+                            unitId: msg.payload.unitid
+                        }
+                    }, responseCallBack)
+                } else if (msg.payload.functioncode == 3) {
+                    connection.readHoldingRegisters({
+                        address: msg.payload.address,
+                        quantity: msg.payload.quantity,
+                        extra: {
+                            unitId: msg.payload.unitid
+                        }
+                    }, responseCallBack)
+                } else if (msg.payload.functioncode == 4) {
+                    connection.readInputRegisters({
+                        address: msg.payload.address,
+                        quantity: msg.payload.quantity,
+                        extra: {
+                            unitId: msg.payload.unitid
+                        }
+                    }, responseCallBack)
+                }
+            }           
         });
     }
     RED.nodes.registerType("modbus-tcp-ip", ModbusTcpIpNode);
