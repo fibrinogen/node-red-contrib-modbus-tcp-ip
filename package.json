@@ -1,12 +1,12 @@
 {
-  "name": "node-red-contrib-modbus-tcp-ip",
-  "version": "1.1.5",
-  "description": "A simple node for realtime MODBUS TCP/IP Process with added features.",
+  "name": "node-red-contrib-re-modbus-tcp-ip",
+  "version": "1.2.0",
+  "description": "Connects to a modbus slave and performs modbus read operations via TCP /IP",
   "main": "modbus-tcp-ip.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Balaji L Narayanan",
+  "author": "Balaji L Narayanan with some changes from Stefan Bremer",
   "license": "ISC",
   "dependencies": {
     "modbus-pdu": "^1.13.0"
@@ -16,11 +16,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/balaji8385/node-red-contrib-modbus-tcp-ip.git"
-},
+    "url": "https://github.com/fibrinogen/node-red-contrib-modbus-tcp-ip.git"
+  },
   "node-red": {
     "nodes": {
-      "modbus-tcp-ip": "modbus-tcp-ip.js"
+      "re-modbus-tcp-ip": "modbus-tcp-ip.js"
     }
   }
 }

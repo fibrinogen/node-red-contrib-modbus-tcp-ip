@@ -1,42 +1,104 @@
 <script type="text/javascript">
-    RED.nodes.registerType('modbus-tcp-ip',{
+    RED.nodes.registerType('modbus-read',{
         category: 'function',
         color: '#D8BFD8',
         defaults: {
-            name: {value:"Modbus-TCP Flexi Getter"},
+            name: {value:"modbus read"},
             ip: {value:"192.168.0.100", type:"string"},
-            port: {value:26, type:"number"},
+            port: {value:502, type:"number"},
+            timeout: {value:100, type:"number"},
+            retries: {value:0, type:"number"},
+            retry: {value:100, type:"number"},
             logerror: {value:true }
         },
         inputs:1,
         outputs:1,
         icon: "bridge.png",
         label: function() {
-            return this.name||"modbus-tcp-ip";
+            return this.name||"modbus read";
         }
     });
 </script>
 
-<script type="text/x-red" data-template-name="modbus-tcp-ip">
+<script type="text/x-red" data-template-name="modbus-read">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"></i>Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-      
+        <label for="node-input-name"><i class="icon-tag"></i>name</label>
+        <input type="text" id="node-input-name" placeholder="name">
     </div>
     <div class="form-row">
-            <label for="node-input-ip"><i class="icon-tag"></i>IP</label>
-            <input type="text" id="node-input-ip" placeholder="IP">
+        <label for="node-input-ip"><i class="icon-tag"></i>IP</label>
+        <input type="text" id="node-input-ip" placeholder="IP">
     </div>
     <div class=form-row>
-            <label for="node-input-port"><i class="icon-tag"></i>Port</label>
-            <input type="text" id="node-input-port" placeholder="Port">
+        <label for="node-input-port"><i class="icon-tag"></i>port</label>
+        <input type="text" id="node-input-port" placeholder="port">
     </div>
     <div class=form-row>
-            <label for="node-input-logerror"><i class="icon-tag"></i>Log Errors</label>
-            <input type="checkbox" id="node-input-logerror">
+        <label for="node-input-timeout"><i class="icon-tag"></i>connection timeout (ms)</label>
+        <input type="text" id="node-input-timeout" placeholder="timeout">
+    </div>
+    <div class=form-row>
+        <label for="node-input-retries"><i class="icon-tag"></i>number of retries</label>
+        <input type="text" id="node-input-retries" placeholder="retries">
+    </div>
+    <div class=form-row>
+        <label for="node-input-retry"><i class="icon-tag"></i>retry after (ms)</label>
+        <input type="text" id="node-input-retry" placeholder="retry">
+    </div>
+    <div class=form-row>
+        <label for="node-input-logerror"><i class="icon-tag"></i>log / throw errors</label>
+        <input type="checkbox" id="node-input-logerror">
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="modbus-tcp-ip">
-    <p>A simple node that converts the message payloads into all modbus-tcp-ip characters</p>
+<script type="text/html" data-help-name="modbus-read">
+    <p>Connects to a modbus slave and performs modbus read operations via TCP/IP.</p>
+    
+    <h3>Inputs</h3>
+        <dl class="message-properties">
+            <dt>payload
+                <span class="property-type">object</span>
+            </dt>
+            <dd> contains connection details </dd>
+            <dd>e.g.:<br> 
+                msg.payload = {<br>
+                    "unitid": 1,<br>
+                    "functioncode": 3,<br>
+                    "address": 400,<br>
+                    "quantity": 2,<br>
+                    "modbus_ip": "192.168.20.40",<br>
+                    "modbus_port": 502,<br>
+                    "timeout": 100,<br>
+                    "retries": 0,<br>
+                    "retry": 100,<br>
+                    "logerror": true<br>
+                };<br>
+                <br>
+                functioncode can be:<br>
+                1 readCoils<br>
+                2 readDiscreteInputs<br>
+                3 readHoldingRegisters<br>
+                4 readInputRegisters<br>
+            </dd>
+        </dl>
+    
+     <h3>Outputs</h3>
+         <ol class="node-ports">
+             <li>Standard output
+                 <dl class="message-properties">
+                     <dt>responsebuffer <span class="property-type">buffer</span></dt>
+                     <dd>contains a byte buffer with the requested length.</dd>
+                     <dd>E.g. for a 2 word quantity this will be 4 bytes.</dd>
+                 </dl>
+             </li>
+             <li>Standard error
+            </li>
+         </ol>
+    
+    <h3>Details</h3>
+    
+    <h3>References</h3>
+
 </script>
+
+
